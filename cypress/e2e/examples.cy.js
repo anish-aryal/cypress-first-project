@@ -34,11 +34,61 @@ describe('various examples', () =>{
         cy.wait(1500);
     })
 
-    it.only('intercepts',() =>{
+    it('intercepts',() =>{
         cy.intercept("POST", "/examples",{
           fixture: 'example.json'
         })
         cy.getTestData('post-button').click();
+    })
+
+    it.only('grudge list',() =>{
+        cy.contains(/add some grudges/i)
+        cy.getTestData('grudge-list').within(()=>{
+            cy.get('li').should('have.length',0)
+        })
+
+        cy.getTestData('clear-btn').should('not.be.exist')
+        cy.getTestData('grudgelist-title').should('have.text','Add Some Grudges')
+
+        //adding grudge to the grudge list
+        cy.getTestData('grudge-input').within(()=>{
+            cy.get('input').type('some grudge')
+        })
+        cy.getTestData('add-grudge-button').click()
+        cy.getTestData('grudge-list').within(()=>{
+            cy.get('li').should('have.length',1)
+        })
+        cy.getTestData('grudgelist-title').should('have.text','Grudges')
+
+        //adding second grudge
+        cy.getTestData('grudge-input').within(()=>{
+            cy.get('input').type('Second grudge')
+        })
+        cy.getTestData('add-grudge-button').click()
+        cy.getTestData('grudge-list').within(()=>{
+            cy.get('li').should('have.length',2)
+            cy.get('li').its(0).should('contains.text','some grudge')
+        })
+
+        //removing first grudge
+        cy.getTestData('grudge-list').within(()=>{
+            cy.get('li').its(0).within(()=>{
+                cy.get('button').click()
+            })
+
+        })
+        cy.getTestData('grudge-list').within(()=>{
+            cy.get('li').should('have.length',1)
+        })
+
+
+        //clearing all the grudges
+        cy.getTestData('clear-btn').should('be.visible')
+        cy.getTestData('clear-btn').click()
+        cy.getTestData('grudge-list').within(()=>{
+            cy.get('li').should('have.length',0)
+        })
+
     })
 
 })

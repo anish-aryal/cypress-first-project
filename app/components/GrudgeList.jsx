@@ -40,38 +40,39 @@ export default function GrudgeList(){
 
     return (
         <div style={{margin: '20px'}}>
-            <h3 style={{margin: '20px 0px'}}>{title}</h3>
+            <h3 data-test='grudgelist-title' style={{margin: '20px 0px'}}>{title}</h3>
             <div>
-            <TextField 
-            label="Add Grudge" 
-            variant="filled" 
+            <TextField
+            label="Add Grudge"
+            variant="filled"
             value={inputValue}
             onChange={e => setInputValue(e.target.value)}
             style={{backgroundColor: 'white'}}
+            data-test="grudge-input"
             />
             </div>
-            <Button onClick={addGrudge}>
+            <Button onClick={addGrudge} data-test="add-grudge-button">
                 Add Grudge
             </Button>
-            <ul style={{color: 'white', listStyleType: 'none'}}>
+            <ul data-test='grudge-list' style={{color: 'white', listStyleType: 'none'}}>
                 {
                     grudges.length > 0 && (
                         grudges.map((g) => {
-                           return ( 
+                           return (
                            <li key={g.id}>
                                 <span>
                                 {g.text}
                                 </span>
                                 <Button onClick={() => deleteGrudge(g)}>
                                     X
-                                </Button> 
+                                </Button>
                             </li>
                         )})
                     )
                 }
             </ul>
             {
-                grudges.length > 0 && <Button onClick={clearGrudges}>Clear</Button>
+                grudges.length > 0 && <Button data-test="clear-btn" onClick={clearGrudges}>Clear</Button>
             }
         </div>
     )
